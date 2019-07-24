@@ -52,7 +52,7 @@ describe('Feature Test: ', function(){
        for (var i = 0; i < 6; i++) {
          thermostat.raiseTemp(1);
        }
-       expect(thermostat.getCurrentTemperature()).toEqual(25);
+       expect(thermostat.getTemp()).toEqual(25);
      });
    });
    describe('when power saving mode is off', function() {
@@ -61,7 +61,7 @@ describe('Feature Test: ', function(){
        for (var i = 0; i < 13; i++) {
          thermostat.raiseTemp(1);
        }
-       expect(thermostat.getCurrentTemperature()).toEqual(32);
+       expect(thermostat.getTemp()).toEqual(32);
      });
    });
    it('can be reset to the default temperature', function() {
@@ -69,7 +69,7 @@ describe('Feature Test: ', function(){
        thermostat.raiseTemp(1);
        }
      thermostat.resetTemperature();
-     expect(thermostat.getCurrentTemperature()).toEqual(20);
+     expect(thermostat.getTemp()).toEqual(20);
    });
    describe('displaying usage levels', function() {
      describe('when the temperature is below 18 degrees', function() {
