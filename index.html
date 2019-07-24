@@ -1,12 +1,40 @@
 <!DOCTYPE html>
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Thermostat app</title>
-
-    <script src="src/thermostat.js"></script>
+<html>
+  <center><head>
+    <title>Thermostat</title>
   </head>
+  <center><body>
+    <section>
+      <h1 id="temperature">Thermostat</h1>
+      <p>
+        <b><button id="temperature-up">+</button></b>
+        <c><button id="temperature-down">-</button></c>
+        <button id="temperature-reset">reset</button>
+        power saving mode is <span id="power-saving-status">on</span>
+        <button id="powersaving-on">PSM on</button>
+        <button id="powersaving-off">PSM off</button>
+      </p>
+    </section>
+    <script src="src/thermostat.js"></script>
+    <a href="http://jquery.com/">jQuery</a>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script>
+      $( document ).ready(function() {
+        $( "a" ).click(function( event ) {
+          event.preventDefault();
+          $( this ).hide( "slow" );
+        });
+        $( "b" ).click(function( event ) {
+          event.preventDefault();
+          $( this ).hide( "slow" );
+        });
+        $( "c" ).click(function( event ) {
+          event.preventDefault();
+          $( this ).fadeOut(500);
+        });
+      });
+    </script>
 
-  <body></body>
+  </body>
 </html>
