@@ -1,40 +1,115 @@
 <!DOCTYPE html>
 
 <html>
-  <center><head>
+<center>
+
+  <head>
+    <link rel="stylesheet" href="public/stylesheet.css">
     <title>Thermostat</title>
   </head>
-  <center><body>
-    <section>
-      <h1 id="temperature">Thermostat</h1>
-      <p>
-        <b><button id="temperature-up">+</button></b>
-        <c><button id="temperature-down">-</button></c>
-        <button id="temperature-reset">reset</button>
-        power saving mode is <span id="power-saving-status">on</span>
-        <button id="powersaving-on">PSM on</button>
-        <button id="powersaving-off">PSM off</button>
-      </p>
-    </section>
-    <script src="src/thermostat.js"></script>
-    <a href="http://jquery.com/">jQuery</a>
-    <script src="node_modules/jquery/dist/jquery.js"></script>
-    <script>
-      $( document ).ready(function() {
-        $( "a" ).click(function( event ) {
-          event.preventDefault();
-          $( this ).hide( "slow" );
-        });
-        $( "b" ).click(function( event ) {
-          event.preventDefault();
-          $( this ).hide( "slow" );
-        });
-        $( "c" ).click(function( event ) {
-          event.preventDefault();
-          $( this ).fadeOut(500);
-        });
-      });
-    </script>
+  <center>
 
-  </body>
+    <body style="height: 1500px; background-image: linear-gradient(white, yellow)" >
+      <section>
+      <style>
+        #sun {
+          width: 100px;
+          height: 100px;
+        }
+      </style>
+      <body>
+
+        <img id="sun" scr="img/sun_hot.png" width="2" height="2">
+
+      </body>
+      </section>
+      <section>
+        <h1 id="temperature"></h1>
+        <p>
+          <button id="temp-up">+</button>
+          <button id="temp-down">-</button>
+          <button id="temp-reset">reset</button>
+          power saving mode is <span id="power-saving-status">on</span>
+          <button id="psm-on">PSM on</button>
+          <button id="psm-off">PSM off</button>
+        </p>
+      </section>
+      <section>
+        <form id="select-city">
+          <input id="current-city" type="text" placeholder="Enter a city"></input>
+          <input type="submit"></input>
+        </form>
+        <h1><span id="city-weather">Local</span> temperature: <span id="current-temperature"></span></h1>
+      </section>
+      <script src="src/thermostat.js"></script>
+      <script src="node_modules/jquery/dist/jquery.js"></script>
+      <script>
+        $('#select-city').submit(function(event) {
+          event.preventDefault();
+          var city = $('#current-city').val();
+          displayWeather(city);
+        })
+
+        function displayWeather(city) {
+          var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + city;
+          var token = '&appid=a3d9eb01d4de82b9b8d0849ef604dbed';
+          var units = '&units=metric';
+          $.get(url + token + units, function(data) {
+            $('#current-temperature').text(data.main.temp);
+            $('#city-weather').text(city);
+          })
+        };
+        $(document).ready(function() {
+          var thermostat = new Thermostat();
+          updateTemperature();
+
+          $('#temp-up').click(function() {
+            thermostat.raiseTemp(1);
+            updateTemperature();
+          });
+
+          $('#temp-down').click(function() {
+            thermostat.lowerTemp(1);
+            updateTemperature();
+          });
+
+          $('#temp-reset').click(function() {
+            thermostat.resetTemperature();
+            updateTemperature();
+          });
+
+          $('#psm-on').click(function() {
+            thermostat.switchPowerSavingModeOn();
+            $('#power-saving-status').text('on')
+            updateTemperature();
+          })
+
+          $('#psm-off').click(function() {
+            thermostat.switchPowerSavingModeOff();
+            $('#power-saving-status').text('off')
+            updateTemperature();
+          })
+
+          function updateTemperature() {
+            $('#temperature').text('Current Temp: ' + thermostat.getTemp());
+            updateimage()
+            $('#temperature').attr('class', thermostat.energyUsage());
+          };
+          function updateimage() {
+            if (thermostat.energyUsage() === 'high-usage') {
+              $("#sun").attr("src", "img/sun_hot.png");
+            } else if (thermostat.energyUsage() === 'low-usage') {
+              $("#sun").attr("src", "img/sun_cold.png");
+            } else {
+              $("#sun").attr("src", "img/sun.png");
+            }
+          };
+        });
+      </script>
+      <script>
+      </script>
+
+
+    </body>
+
 </html>
